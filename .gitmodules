@@ -1,0 +1,3 @@
+[submodule "TPGrafica"]
+	path = TPGrafica
+	url = https://github.com/EdersonJr/TPGrafica.git
