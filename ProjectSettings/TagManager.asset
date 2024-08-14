@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - PickUp
+  - Fluid
+  - Pan
+  - Food
+  - CookingManager
   layers:
   - Default
   - TransparentFX
