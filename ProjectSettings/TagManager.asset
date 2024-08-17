@@ -9,6 +9,7 @@ TagManager:
   - Pan
   - Food
   - CookingManager
+  - fryingPan
   layers:
   - Default
   - TransparentFX

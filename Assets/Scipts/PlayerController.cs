@@ -55,6 +55,19 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("O objeto clicado é uma panela, mas nenhum alimento foi selecionado.");
             }
         }
+        else if (clickedObject.CompareTag("fryingPan"))
+        {
+            if (selectedFood != null)
+            {
+                Debug.Log($"Adicionando {selectedFood.name} à frigideira {clickedObject.name}");
+                cookingManager.AddFoodToFryPan(selectedFood, clickedObject);  // Passe o alimento selecionado
+                selectedFood = null;  // Limpe a seleção de alimento após adicionar
+            }
+            else
+            {
+                Debug.Log("O objeto clicado é uma panela, mas nenhum alimento foi selecionado.");
+            }
+        }
         else
         {
             Debug.Log("O objeto clicado não é nem comida nem uma panela.");

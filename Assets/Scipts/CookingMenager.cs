@@ -53,5 +53,21 @@ public class CookingManager : MonoBehaviour
             Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
         }
     }
+    public void AddFoodToFryPan(GameObject foodItem, GameObject fryingPan)
+    {
+        Transform foodPosition = fryingPan.transform.Find("FoodPosition"); // Encontre o GameObject "FoodPosition" dentro da panela
+        
+        if (foodPosition != null)
+        {
+            // Mova o alimento para a posição dentro da panela
+            foodItem.transform.position = foodPosition.position;
+            foodItem.transform.parent = fryingPan.transform; // Torna a panela o pai do alimento
+            Debug.Log($"Adicionou {foodItem.name} à frigideira {fryingPan.name} na posição {foodPosition.position}");
+        }
+        else
+        {
+            Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
+        }
+    }
 
 }
