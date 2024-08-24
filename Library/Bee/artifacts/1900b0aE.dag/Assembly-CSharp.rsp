@@ -378,6 +378,8 @@
 "Assets/CoffeeShopStarterPack/Scripts/Utilities/BasicGameEvents.cs"
 "Assets/CoffeeShopStarterPack/Scripts/Utilities/ScreenShotHelper.cs"
 "Assets/CoffeeShopStarterPack/Scripts/Utilities/SliceHelper.cs"
+"Assets/Kabungus/HouseholdItems/Scripts/MouseLook.cs"
+"Assets/Kabungus/HouseholdItems/Scripts/PlayerMovement.cs"
 "Assets/Supercyan Character Pack Free Sample/Scripts/AccessoryLogic.cs"
 "Assets/Supercyan Character Pack Free Sample/Scripts/AccessoryWearLogic.cs"
 "Assets/Supercyan Character Pack Free Sample/Scripts/DemoFree.cs"
