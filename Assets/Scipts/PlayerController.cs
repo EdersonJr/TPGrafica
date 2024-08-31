@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     private CookingManager cookingManager;
     private GameObject selectedFood;  // Armazena a referência ao alimento selecionado
+    public Vector3 floatingOffset = new Vector3(0, 0, 2); // Offset da posição flutuante em relação à câmera
 
     void Start()
     {
@@ -29,9 +29,15 @@ public class PlayerController : MonoBehaviour
                 HandleClick(hit.collider.gameObject);
             }
         }
-    }
 
-    
+        // Se um alimento está selecionado, mantê-lo flutuando em frente à câmera
+        if (selectedFood != null)
+        {
+            Vector3 cameraPosition = Camera.main.transform.position;
+            Vector3 cameraForward = Camera.main.transform.forward;
+            selectedFood.transform.position = cameraPosition + cameraForward * floatingOffset.z + new Vector3(floatingOffset.x, floatingOffset.y, 0);
+        }
+    }
 
     void HandleClick(GameObject clickedObject)
     {

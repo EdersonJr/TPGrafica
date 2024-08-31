@@ -69,5 +69,6 @@ public class CookingManager : MonoBehaviour
             Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
         }
     }
+    
 
 }
