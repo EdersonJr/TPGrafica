@@ -39,13 +39,13 @@ public class CookingManager : MonoBehaviour
     // Método para adicionar alimento à panela
     public void AddFoodToPan(GameObject foodItem, GameObject pan)
     {
-        Transform foodPosition = pan.transform.Find("FoodPosition"); // Encontre o GameObject "FoodPosition" dentro da panela
-        
+        Transform foodPosition = pan.transform.Find("FoodPosition");
+
         if (foodPosition != null)
         {
             // Mova o alimento para a posição dentro da panela
             foodItem.transform.position = foodPosition.position;
-            foodItem.transform.parent = pan.transform; // Torna a panela o pai do alimento
+            foodItem.transform.parent = foodPosition; // Torna o "FoodPosition" o pai do alimento
             Debug.Log($"Adicionou {foodItem.name} à panela {pan.name} na posição {foodPosition.position}");
         }
         else
@@ -53,6 +53,7 @@ public class CookingManager : MonoBehaviour
             Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
         }
     }
+
     public void AddFoodToFryPan(GameObject foodItem, GameObject fryingPan)
     {
         Transform foodPosition = fryingPan.transform.Find("FoodPosition"); // Encontre o GameObject "FoodPosition" dentro da panela
@@ -69,6 +70,66 @@ public class CookingManager : MonoBehaviour
             Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
         }
     }
-    
+    public void RemoveFoodFromPan(GameObject pan)
+    {
+        Transform foodPosition = pan.transform.Find("FoodPosition");
+
+        if (foodPosition != null)
+        {
+            Debug.Log($"foodPosition encontrado: {foodPosition.name}, filhos: {foodPosition.childCount}");
+
+            if (foodPosition.childCount > 0)
+            {
+                GameObject foodItem = foodPosition.GetChild(0).gameObject;
+                Debug.Log($"Alimento encontrado: {foodItem.name}");
+
+                foodItem.transform.parent = null; // Remove o alimento da panela
+                foodItem.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2; // Move o alimento para frente da câmera
+
+                Debug.Log($"Removeu {foodItem.name} da panela {pan.name}");
+            }
+            else
+            {
+                Debug.Log("Não há alimento na panela para remover.");
+            }
+        }
+        else
+        {
+            Debug.LogError("O GameObject 'FoodPosition' não encontrado na panela.");
+        }
+    }
+    public void RemoveFoodFromFryPan(GameObject fryingPan)
+    {
+        Transform foodPosition = fryingPan.transform.Find("FoodPosition");
+
+        if (foodPosition != null)
+        {
+            Debug.Log($"foodPosition encontrado: {foodPosition.name}, filhos: {foodPosition.childCount}");
+
+            if (foodPosition.childCount > 0)
+            {
+                GameObject foodItem = foodPosition.GetChild(0).gameObject;
+                Debug.Log($"Alimento encontrado: {foodItem.name}");
+
+                foodItem.transform.parent = null; // Remove o alimento da frigideira
+                foodItem.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2; // Move o alimento para frente da câmera
+
+                Debug.Log($"Removeu {foodItem.name} da frigideira {fryingPan.name}");
+            }
+            else
+            {
+                Debug.Log("Não há alimento na frigideira para remover.");
+            }
+        }
+        else
+        {
+            Debug.LogError("O GameObject 'FoodPosition' não encontrado na frigideira.");
+        }
+    }
+
+
+
+
+
 
 }

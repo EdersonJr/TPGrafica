@@ -30,48 +30,48 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Se um alimento está selecionado, mantê-lo flutuando em frente à câmera
         if (selectedFood != null)
         {
             Vector3 cameraPosition = Camera.main.transform.position;
             Vector3 cameraForward = Camera.main.transform.forward;
             selectedFood.transform.position = cameraPosition + cameraForward * floatingOffset.z + new Vector3(floatingOffset.x, floatingOffset.y, 0);
+
+            if (Input.GetMouseButtonDown(1)) // Botão direito para soltar o alimento
+            {
+                selectedFood = null;
+                Debug.Log("Soltou o alimento.");
+            }
         }
     }
-
     void HandleClick(GameObject clickedObject)
     {
-        // Verifique se o objeto clicado é um alimento
         if (clickedObject.CompareTag("Food"))
         {
-            selectedFood = clickedObject;  // Armazena o alimento selecionado
+            selectedFood = clickedObject;
             Debug.Log($"Selecionou o alimento {clickedObject.name}");
         }
-        // Verifique se o objeto clicado é uma panela
         else if (clickedObject.CompareTag("Pan"))
         {
             if (selectedFood != null)
             {
-                Debug.Log($"Adicionando {selectedFood.name} à panela {clickedObject.name}");
-                cookingManager.AddFoodToPan(selectedFood, clickedObject);  // Passe o alimento selecionado
-                selectedFood = null;  // Limpe a seleção de alimento após adicionar
+                cookingManager.AddFoodToPan(selectedFood, clickedObject);
+                selectedFood = null;
             }
             else
             {
-                Debug.Log("O objeto clicado é uma panela, mas nenhum alimento foi selecionado.");
+                cookingManager.RemoveFoodFromPan(clickedObject);
             }
         }
         else if (clickedObject.CompareTag("fryingPan"))
         {
             if (selectedFood != null)
             {
-                Debug.Log($"Adicionando {selectedFood.name} à frigideira {clickedObject.name}");
-                cookingManager.AddFoodToFryPan(selectedFood, clickedObject);  // Passe o alimento selecionado
-                selectedFood = null;  // Limpe a seleção de alimento após adicionar
+                cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
+                selectedFood = null;
             }
             else
             {
-                Debug.Log("O objeto clicado é uma panela, mas nenhum alimento foi selecionado.");
+                cookingManager.RemoveFoodFromFryPan(clickedObject); // Chame o método para frigideira
             }
         }
         else
@@ -79,4 +79,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("O objeto clicado não é nem comida nem uma panela.");
         }
     }
+
+
 }
