@@ -6,15 +6,23 @@ public class PlayerController : MonoBehaviour
 {
     private CookingManager cookingManager;
     private GameObject selectedFood;  // Armazena a referência ao alimento selecionado
-    private bool isDragging = false;  // Indica se o alimento está sendo arrastado
     public Vector3 floatingOffset = new Vector3(0, 0, 2); // Offset da posição flutuante em relação à câmera
+    public GameManager gameManager;
+    private bool isDragging = false;  // Para rastrear se está arrastando o alimento
 
     void Start()
     {
         cookingManager = FindObjectOfType<CookingManager>();
+        gameManager = FindObjectOfType<GameManager>(); // Referência ao GameManager
+
         if (cookingManager == null)
         {
             Debug.LogError("CookingManager não encontrado na cena.");
+        }
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager não encontrado na cena.");
         }
     }
 
@@ -32,11 +40,18 @@ public class PlayerController : MonoBehaviour
         }
 
         // Se um alimento está selecionado e sendo arrastado, mantenha-o flutuando em frente à câmera
-        if (isDragging && selectedFood != null)
+        if (selectedFood != null)
         {
             Vector3 cameraPosition = Camera.main.transform.position;
             Vector3 cameraForward = Camera.main.transform.forward;
             selectedFood.transform.position = cameraPosition + cameraForward * floatingOffset.z + new Vector3(floatingOffset.x, floatingOffset.y, 0);
+
+            if (Input.GetMouseButtonDown(1)) // Botão direito para soltar o alimento
+            {
+                selectedFood = null;
+                isDragging = false;  // Parar de arrastar o alimento
+                Debug.Log("Soltou o alimento.");
+            }
         }
     }
 
@@ -50,11 +65,27 @@ public class PlayerController : MonoBehaviour
         }
         else if (clickedObject.CompareTag("Pan"))
         {
+            PanProperties panProperties = clickedObject.GetComponent<PanProperties>();
+
             if (selectedFood != null)
             {
+                if (panProperties == null)
+                {
+                    Debug.LogWarning("O objeto clicado não tem o componente PanProperties.");
+                    return;
+                }
+
+                if (!panProperties.hasWater)
+                {
+                    Debug.Log("A Panela não tem água. Você perdeu pontos.");
+                    gameManager.RemovePoints(10); // Perde 10 pontos
+                }
+                else {
                 cookingManager.AddFoodToPan(selectedFood, clickedObject);
                 selectedFood = null;
                 isDragging = false;
+                }
+                
             }
             else
             {
@@ -63,11 +94,27 @@ public class PlayerController : MonoBehaviour
         }
         else if (clickedObject.CompareTag("fryingPan"))
         {
+            PanProperties panProperties = clickedObject.GetComponent<PanProperties>();
+
             if (selectedFood != null)
             {
+                if (panProperties == null)
+                {
+                    Debug.LogWarning("O objeto clicado não tem o componente PanProperties.");
+                    return;
+                }
+
+                if (!panProperties.hasOil)
+                {
+                    Debug.Log("A Frigideira não tem óleo. Você perdeu pontos.");
+                    gameManager.RemovePoints(10); // Perde 10 pontos
+                }
+                else{
                 cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
                 selectedFood = null;
                 isDragging = false;
+                }
+                
             }
             else
             {
