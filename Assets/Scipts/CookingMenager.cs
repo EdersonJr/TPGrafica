@@ -26,7 +26,9 @@ public class CookingManager : MonoBehaviour
             {
                 isCooking = false;
                 Debug.Log("Food is ready!");
-                // Handle food completion logic
+
+                // Chama a função para substituir o Steak pela Burger
+                ReplaceFoodWithBurger();
             }
         }
 
@@ -36,10 +38,55 @@ public class CookingManager : MonoBehaviour
             if (Time.time - entry.Value >= 2f)
             {
                 Debug.Log($"{entry.Key.name} está pronto!");
-                // Opcional: Remova o alimento do dicionário após o aviso
+
+                // Substitui o Steak pela Burger, se for o Steak
+                if (entry.Key.name == "Steak")
+                {
+                    ReplaceFoodWithBurger();
+                }
+
+                // Remove o alimento do dicionário após o aviso
                 foodStartTime.Remove(entry.Key);
-                break; // É importante sair do loop para evitar erros de modificação do dicionário durante a iteração
+                break; // Importante sair do loop para evitar erros de modificação do dicionário
             }
+        }
+    }
+
+    // Função para substituir o Steak pela Burger
+    void ReplaceFoodWithBurger()
+    {
+        // Encontre o alimento Steak na cena
+        GameObject steak = GameObject.Find("Steak");
+
+        if (steak != null)
+        {
+            // Pegue a posição e a rotação do Steak
+            Vector3 steakPosition = steak.transform.position;
+            Quaternion steakRotation = steak.transform.rotation;
+
+            // Encontre a Burger na cena (ou prefab se preferir instanciar)
+            GameObject Burger = GameObject.Find("Burger");
+
+            if (Burger != null)
+            {
+                // Posiciona a Burger na posição do Steak
+                Burger.transform.position = steakPosition;
+                Burger.transform.rotation = steakRotation;
+                Burger.SetActive(true); // Ativa a Burger, se estiver desativada
+
+                // Destrói o Steak
+                Destroy(steak);
+
+                Debug.Log("Steak foi substituído por Burger!");
+            }
+            else
+            {
+                Debug.LogError("O Burger não foi encontrada na cena.");
+            }
+        }
+        else
+        {
+            Debug.LogError("O Steak não foi encontrado na cena.");
         }
     }
 
