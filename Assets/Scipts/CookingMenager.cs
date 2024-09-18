@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CookingManager : MonoBehaviour
 {
@@ -12,10 +13,21 @@ public class CookingManager : MonoBehaviour
     public GameObject water;
     public GameObject oil;
 
-    private float cookingTime = 0f;
+    [SerializeField] TextMeshProUGUI timerText; //mostra timer
+
+    [SerializeField] TextMeshProUGUI foodName; //mostra nome da comida no timer
+    private float cookingTime = 10f;
     private bool isCooking = false;
 
     private Dictionary<GameObject, float> foodStartTime = new Dictionary<GameObject, float>(); // Dicionário para armazenar o tempo de início do alimento
+
+    void Start(){
+
+        timerText.gameObject.SetActive(false);
+
+        foodName.gameObject.SetActive(false);
+
+    }
 
     void Update()
     {
@@ -27,15 +39,38 @@ public class CookingManager : MonoBehaviour
                 isCooking = false;
                 Debug.Log("Food is ready!");
 
+                timerText.color = Color.red;
+
+                foodName.color = Color.red;
+
+                cookingTime = 0f;
+
                 // Chama a função para substituir o Steak pela Burger
                 ReplaceFoodWithBurger();
             }
+             else if(cookingTime <4){
+
+                timerText.color = Color.yellow;
+
+                foodName.color = Color.yellow;
+
+            }
+
+            else if(cookingTime < 10){
+
+                timerText.color = Color.green;
+
+                foodName.color = Color.green;
+
+            }
+
+            SetTimerText();
         }
 
         // Verifica se algum alimento está pronto após 2 segundos
         foreach (var entry in foodStartTime)
         {
-            if (Time.time - entry.Value >= 2f)
+            if (Time.time - entry.Value >= 10f)
             {
                 Debug.Log($"{entry.Key.name} está pronto!");
 
@@ -50,6 +85,12 @@ public class CookingManager : MonoBehaviour
                 break; // Importante sair do loop para evitar erros de modificação do dicionário
             }
         }
+    }
+
+    private void SetTimerText(){
+
+        timerText.text = cookingTime.ToString("0.00");
+
     }
 
     // Função para substituir o Steak pela Burger
@@ -94,10 +135,11 @@ public class CookingManager : MonoBehaviour
         }
     }
 
-    public void StartCooking(float time)
+    public void StartCooking()
     {
-        cookingTime = time;
         isCooking = true;
+        timerText.gameObject.SetActive(true);
+        foodName.gameObject.SetActive(true);
     }
 
     public void AddFoodToPan(GameObject foodItem, GameObject pan)
@@ -106,8 +148,11 @@ public class CookingManager : MonoBehaviour
 
         if (foodPosition != null)
         {
+            StartCooking();
+            foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna o "FoodPosition" o pai do alimento
+            cookingTime = 10f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
             Debug.Log($"Adicionou {foodItem.name} à panela {pan.name} na posição {foodPosition.position}");
@@ -124,8 +169,11 @@ public class CookingManager : MonoBehaviour
 
         if (foodPosition != null)
         {
+            StartCooking();
+            foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna a frigideira o pai do alimento
+            cookingTime = 10f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
             Debug.Log($"Adicionou {foodItem.name} à frigideira {fryingPan.name} na posição {foodPosition.position}");
@@ -144,6 +192,11 @@ public class CookingManager : MonoBehaviour
         {
             if (foodPosition.childCount > 0)
             {
+                isCooking = false;
+
+                timerText.gameObject.SetActive(false);
+
+                foodName.gameObject.SetActive(false);
                 GameObject foodItem = foodPosition.GetChild(0).gameObject;
                 foodItem.transform.SetParent(null); // Remove o alimento da panela
                 foodItem.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2; // Move o alimento para frente da câmera
@@ -171,6 +224,11 @@ public class CookingManager : MonoBehaviour
         {
             if (foodPosition.childCount > 0)
             {
+                isCooking = false;
+
+                timerText.gameObject.SetActive(false);
+
+                foodName.gameObject.SetActive(false);
                 GameObject foodItem = foodPosition.GetChild(0).gameObject;
                 foodItem.transform.SetParent(null); // Remove o alimento da frigideira
                 foodItem.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2; // Move o alimento para frente da câmera

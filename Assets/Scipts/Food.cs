@@ -7,6 +7,6 @@ public class Food : MonoBehaviour
     public void Cook()
     {
         // Chame o método para iniciar o cozimento
-        FindObjectOfType<CookingManager>().StartCooking(cookingTime);
+        FindObjectOfType<CookingManager>().StartCooking();
     }
 }
