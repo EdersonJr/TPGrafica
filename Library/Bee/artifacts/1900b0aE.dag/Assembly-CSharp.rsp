@@ -390,6 +390,8 @@
 "Assets/Scipts/CookingMenager.cs"
 "Assets/Scipts/Food.cs"
 "Assets/Scipts/FoodItem.cs"
+"Assets/Scipts/GameMenager.cs"
+"Assets/Scipts/PanProperties.cs"
 "Assets/Scipts/PlayerController.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"

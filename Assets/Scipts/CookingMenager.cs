@@ -69,8 +69,12 @@ public class CookingManager : MonoBehaviour
 
             if (Burger != null)
             {
-                // Posiciona a Burger na posição do Steak
-                Burger.transform.position = steakPosition;
+                // Ajusta a posição da Burger para evitar sobreposição
+                Vector3 burgerPosition = steakPosition;
+                burgerPosition.y += 0.1f; // Eleva a Burger ligeiramente acima da posição do Steak
+
+                // Posiciona a Burger na nova posição
+                Burger.transform.position = burgerPosition;
                 Burger.transform.rotation = steakRotation;
                 Burger.SetActive(true); // Ativa a Burger, se estiver desativada
 

@@ -10,6 +10,8 @@ TagManager:
   - Food
   - CookingManager
   - fryingPan
+  - waterBottle
+  - oil
   layers:
   - Default
   - TransparentFX
