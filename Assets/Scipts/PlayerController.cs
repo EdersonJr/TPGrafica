@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         cookingManager = FindObjectOfType<CookingManager>();
-        gameManager = FindObjectOfType<GameManager>(); // Referência ao GameManager
+        gameManager = FindObjectOfType<GameManager>(); 
 
         if (cookingManager == null)
         {
@@ -57,6 +57,12 @@ public class PlayerController : MonoBehaviour
 
     void HandleClick(GameObject clickedObject)
     {
+        if (clickedObject.CompareTag("Stove"))  // Adiciona lógica para o fogão
+        {
+            cookingManager.ToggleStove();  // Liga ou desliga o fogão
+            Debug.Log("Clicou no fogão.");
+        }
+
         if (clickedObject.CompareTag("Food"))
         {
             selectedFood = clickedObject;

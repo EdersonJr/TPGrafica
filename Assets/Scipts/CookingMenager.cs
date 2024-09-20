@@ -18,7 +18,7 @@ public class CookingManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI foodName; //mostra nome da comida no timer
     private float cookingTime = 10f;
     private bool isCooking = false;
-
+    private bool isStoveOn = false;  // Indica se o fogão está ligado
     private Dictionary<GameObject, float> foodStartTime = new Dictionary<GameObject, float>(); // Dicionário para armazenar o tempo de início do alimento
 
     void Start(){
@@ -31,7 +31,7 @@ public class CookingManager : MonoBehaviour
 
     void Update()
     {
-        if (isCooking)
+        if (isCooking && isStoveOn)
         {
             cookingTime -= Time.deltaTime;
             if (cookingTime <= 0f)
@@ -137,9 +137,16 @@ public class CookingManager : MonoBehaviour
 
     public void StartCooking()
     {
-        isCooking = true;
-        timerText.gameObject.SetActive(true);
-        foodName.gameObject.SetActive(true);
+       if (isStoveOn)  // Somente inicia o cozimento se o fogão estiver ligado
+        {
+            isCooking = true;
+            timerText.gameObject.SetActive(true);
+            foodName.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("O fogão está desligado! Não pode cozinhar.");
+        }
     }
 
     public void AddFoodToPan(GameObject foodItem, GameObject pan)
@@ -148,7 +155,8 @@ public class CookingManager : MonoBehaviour
 
         if (foodPosition != null)
         {
-            StartCooking();
+            if (isStoveOn){
+                StartCooking();}
             foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna o "FoodPosition" o pai do alimento
@@ -169,7 +177,8 @@ public class CookingManager : MonoBehaviour
 
         if (foodPosition != null)
         {
-            StartCooking();
+            if (isStoveOn){
+                StartCooking();}
             foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna a frigideira o pai do alimento
@@ -246,5 +255,10 @@ public class CookingManager : MonoBehaviour
         {
             Debug.LogError($"O GameObject 'FoodPosition' não encontrado na frigideira {fryingPan.name}.");
         }
+    }
+    public void ToggleStove()  // Método para ligar/desligar o fogão
+    {
+        isStoveOn = !isStoveOn;
+        Debug.Log(isStoveOn ? "Fogão ligado!" : "Fogão desligado!");
     }
 }
