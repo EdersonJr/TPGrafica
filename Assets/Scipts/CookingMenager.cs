@@ -16,17 +16,24 @@ public class CookingManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI timerText; //mostra timer
 
     [SerializeField] TextMeshProUGUI foodName; //mostra nome da comida no timer
-    private float cookingTime = 10f;
+    private float cookingTime = 30f;
+    private GameManager gameManager; // Referência ao GameManager
     private bool isCooking = false;
     private bool isStoveOn = false;  // Indica se o fogão está ligado
+    private bool pointsAdded = false;  // Flag para verificar se os pontos já foram adicionados
     private Dictionary<GameObject, float> foodStartTime = new Dictionary<GameObject, float>(); // Dicionário para armazenar o tempo de início do alimento
 
-    void Start(){
+    void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>(); // Inicializa a referência ao GameManager
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager não encontrado na cena.");
+        }
 
         timerText.gameObject.SetActive(false);
-
         foodName.gameObject.SetActive(false);
-
     }
 
     void Update()
@@ -73,6 +80,7 @@ public class CookingManager : MonoBehaviour
             if (Time.time - entry.Value >= 10f)
             {
                 Debug.Log($"{entry.Key.name} está pronto!");
+                gameManager.AddPoints(10);
 
                 // Substitui o Steak pela Burger, se for o Steak
                 if (entry.Key.name == "Steak")
@@ -294,5 +302,20 @@ public class CookingManager : MonoBehaviour
     {
         isStoveOn = !isStoveOn;
         Debug.Log(isStoveOn ? "Fogão ligado!" : "Fogão desligado!");
+
+        if (isStoveOn && !pointsAdded)
+        {
+            if (gameManager != null)
+            {
+                gameManager.AddPoints(10);  // Adiciona 10 pontos
+                Debug.Log("10 pontos adicionados por ligar o fogão!");
+                pointsAdded = true;  // Marca que os pontos foram adicionados
+            }
+            else
+            {
+                Debug.LogWarning("GameManager não encontrado. Não foi possível adicionar pontos.");
+            }
+        }
     }
+
 }

@@ -7,6 +7,7 @@ public class PanProperties : MonoBehaviour
     public bool hasLid = false ;
     public bool isBurning = false;
     private float timeSinceOilAdded = 0f;
+     private float timeSinceWaterAdded = 0f;
     private bool oilAdded = false;
 
     void Update()
@@ -34,6 +35,15 @@ public class PanProperties : MonoBehaviour
         Debug.Log("Óleo foi adicionado, iniciando o temporizador.");
     }
 
+    public void ResetWaterTimer()
+    {
+        hasWater = true;
+        timeSinceWaterAdded = 0f;
+        isBurning = false;
+        Debug.Log("Água foi adicionado, iniciando o temporizador.");
+    }
+    
+
     // Método para adicionar comida e parar o fogo (se necessário)
     public void AddFood()
     {
@@ -41,6 +51,13 @@ public class PanProperties : MonoBehaviour
         {
             hasFood = true;
             timeSinceOilAdded = 0f; // Reseta o timer porque a comida foi adicionada
+            isBurning = false;      // Certifique-se de que o fogo seja apagado ao adicionar comida
+            Debug.Log("Comida foi adicionada na frigideira.");
+        }
+        if (hasWater)
+        {
+            hasFood = true;
+            timeSinceWaterAdded = 0f; // Reseta o timer porque a comida foi adicionada
             isBurning = false;      // Certifique-se de que o fogo seja apagado ao adicionar comida
             Debug.Log("Comida foi adicionada na frigideira.");
         }

@@ -135,6 +135,18 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Adicionando óleo à frigideira.");
                     panProperties.hasOil = true; // Adiciona óleo à frigideira
                     panProperties.ResetOilTimer(); 
+                    gameManager.AddPoints(10);  // Adiciona 10 pontos
+                    Debug.Log("10 pontos adicionados por colocar comida no fogão!");
+                    selectedFood = null;
+                    isDragging = false; // Para de arrastar o óleo
+                }
+                if (selectedFood != null && selectedFood.CompareTag("waterBottle"))
+                {
+                    Debug.Log("Adicionando água à panela.");
+                    panProperties.hasWater = true; // Adiciona água à panela
+                    panProperties.ResetWaterTimer(); 
+                    gameManager.AddPoints(10);  // Adiciona 10 pontos
+                    Debug.Log("10 pontos adicionados por colocar comida no fogão!");
                     selectedFood = null;
                     isDragging = false; // Para de arrastar o óleo
                 }
@@ -143,6 +155,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Colocando a tampa na frigideira.");
                     cookingManager.AddLidToFryPan(selectedFood, clickedObject);
                     panProperties.hasLid = true; // Coloca a tampa na frigideira
+                    gameManager.AddPoints(10);  // Adiciona 10 pontos
                     selectedFood = null;
                     isDragging = false; // Para de arrastar a tampa
                 }
@@ -152,8 +165,19 @@ public class PlayerController : MonoBehaviour
                     if (panProperties.hasOil)
                     {
                         cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
+                        gameManager.AddPoints(10);  // Adiciona 10 pontos
                         selectedFood = null;
                         panProperties.AddFood();
+                        gameManager.AddPoints(10);
+                        isDragging = false;
+                    }
+                    if (panProperties.hasWater)
+                    {
+                        cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
+                        gameManager.AddPoints(10);  // Adiciona 10 pontos
+                        selectedFood = null;
+                        panProperties.AddFood();
+                        gameManager.AddPoints(10);
                         isDragging = false;
                     }
                     else
