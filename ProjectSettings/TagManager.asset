@@ -12,6 +12,9 @@ TagManager:
   - fryingPan
   - waterBottle
   - oil
+  - Stove
+  - Lid
+  - table
   layers:
   - Default
   - TransparentFX

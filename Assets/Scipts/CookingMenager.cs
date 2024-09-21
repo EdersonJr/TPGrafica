@@ -171,6 +171,40 @@ public class CookingManager : MonoBehaviour
         }
     }
 
+    public void AddLidToFryPan(GameObject lid, GameObject fryingPan)
+    {
+        PanProperties panProperties = fryingPan.GetComponent<PanProperties>();
+
+        if (panProperties != null)
+        {
+            // Coloca a tampa na frigideira
+            panProperties.hasLid = true;
+
+            // Verifica se a frigideira está pegando fogo
+            // Posiciona a tampa na frigideira
+            lid.transform.position = new Vector3(7.75f, 1.53681f, 4.74f);  // Adiciona um pequeno deslocamento para a tampa ficar acima da frigideira
+            //lid.transform.rotation = fryingPan.transform.rotation;  // Alinha a rotação da tampa com a frigideira
+
+            // Verifica se a frigideira está pegando fogo
+            if (panProperties.isBurning)
+            {
+                Debug.Log("A tampa foi colocada. Apagando o fogo na frigideira...");
+                // Apaga o fogo
+                panProperties.isBurning = false;
+                // Ação extra, como som ou animação de apagar o fogo
+            }
+            else
+            {
+                Debug.Log("A tampa foi colocada, mas a frigideira não estava pegando fogo.");
+            }
+
+ 
+        }
+        else
+        {
+            Debug.LogWarning("O objeto clicado não é uma frigideira válida.");
+        }
+    }
     public void AddFoodToFryPan(GameObject foodItem, GameObject fryingPan)
     {
         Transform foodPosition = fryingPan.transform.Find("FoodPosition");

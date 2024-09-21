@@ -113,6 +113,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\CoffeeShopStarterPack\Scripts\ProgressHelper.cs" />
     <Compile Include="Assets\Scipts\FoodItem.cs" />
+    <Compile Include="Assets\Scipts\LidProperties.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\CoffeeShopStarterPack\Scripts\DrinkableProduct.cs" />
     <Compile Include="Assets\CoffeeShopStarterPack\Scripts\ProductWithCover.cs" />

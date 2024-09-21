@@ -53,8 +53,8 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Soltou o alimento.");
             }
         }
+        
     }
-
     void HandleClick(GameObject clickedObject)
     {
         if (clickedObject.CompareTag("Stove"))  // Adiciona lógica para o fogão
@@ -72,15 +72,22 @@ public class PlayerController : MonoBehaviour
         else if (clickedObject.CompareTag("oil"))
         {
             selectedFood = clickedObject;
-            isDragging = true;  // Começa a arrastar o alimento
+            isDragging = true;  // Começa a arrastar o óleo
             Debug.Log($"Selecionou o óleo");
         }
+        else if (clickedObject.CompareTag("Lid"))
+        {
+        selectedFood = clickedObject;
+        isDragging = true;  // Começa a arrastar a tampa
+        Debug.Log("Selecionou a tampa.");
+         }
         else if (clickedObject.CompareTag("waterBottle"))
         {
             selectedFood = clickedObject;
-            isDragging = true;  // Começa a arrastar o alimento
+            isDragging = true;  // Começa a arrastar a água
             Debug.Log($"Selecionou a água");
         }
+        
         else if (clickedObject.CompareTag("Pan"))
         {
             PanProperties panProperties = clickedObject.GetComponent<PanProperties>();
@@ -93,24 +100,24 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
                 
-		if (selectedFood.name == "Water")
-            	{
-                	Debug.Log("Adicionando água à panela.");
-                	panProperties.hasWater = true;
-                	selectedFood = null;
-                	isDragging = false;
-            	}
+                if (selectedFood.name == "Water")
+                {
+                    Debug.Log("Adicionando água à panela.");
+                    panProperties.hasWater = true;
+                    selectedFood = null;
+                    isDragging = false;
+                }
                 else if (!panProperties.hasWater)
                 {
                     Debug.Log("A Panela não tem água. Você perdeu pontos.");
                     gameManager.RemovePoints(10); // Perde 10 pontos
                 }
-                else {
-                cookingManager.AddFoodToPan(selectedFood, clickedObject);
-                selectedFood = null;
-                isDragging = false;
+                else
+                {
+                    cookingManager.AddFoodToPan(selectedFood, clickedObject);
+                    selectedFood = null;
+                    isDragging = false;
                 }
-                
             }
             else
             {
@@ -121,34 +128,44 @@ public class PlayerController : MonoBehaviour
         {
             PanProperties panProperties = clickedObject.GetComponent<PanProperties>();
 
-            if (selectedFood != null)
-            {
-                if (panProperties == null)
+            if (panProperties != null)
+            {   
+                if (selectedFood != null && selectedFood.CompareTag("oil"))
                 {
-                    Debug.LogWarning("O objeto clicado não tem o componente PanProperties.");
-                    return;
+                    Debug.Log("Adicionando óleo à frigideira.");
+                    panProperties.hasOil = true; // Adiciona óleo à frigideira
+                    panProperties.ResetOilTimer(); 
+                    selectedFood = null;
+                    isDragging = false; // Para de arrastar o óleo
                 }
-		if (selectedFood.name == "Oil"){
-			Debug.Log("Adicionando óleo à frigideira.");
-                	panProperties.hasOil = true;
-                	selectedFood = null;
-                	isDragging = false;
-		}
-                else if (!panProperties.hasOil)
+                else if (selectedFood != null && selectedFood.CompareTag("Lid"))
                 {
-                    Debug.Log("A Frigideira não tem óleo. Você perdeu pontos.");
-                    gameManager.RemovePoints(10); // Perde 10 pontos
+                    Debug.Log("Colocando a tampa na frigideira.");
+                    cookingManager.AddLidToFryPan(selectedFood, clickedObject);
+                    panProperties.hasLid = true; // Coloca a tampa na frigideira
+                    selectedFood = null;
+                    isDragging = false; // Para de arrastar a tampa
                 }
-                else{
-                cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
-                selectedFood = null;
-                isDragging = false;
+                else if (selectedFood != null && selectedFood.CompareTag("Food"))
+                {
+                    // Lógica de adicionar comida à frigideira
+                    if (panProperties.hasOil)
+                    {
+                        cookingManager.AddFoodToFryPan(selectedFood, clickedObject);
+                        selectedFood = null;
+                        panProperties.AddFood();
+                        isDragging = false;
+                    }
+                    else
+                    {
+                        Debug.Log("A Frigideira não tem óleo. Você perdeu pontos.");
+                        gameManager.RemovePoints(10); // Perde 10 pontos
+                    }
                 }
-                
-            }
-            else
-            {
-                cookingManager.RemoveFoodFromFryPan(clickedObject);
+                else
+                {
+                    cookingManager.RemoveFoodFromFryPan(clickedObject);
+                }
             }
         }
         else
@@ -159,11 +176,13 @@ public class PlayerController : MonoBehaviour
                 PlaceFood(clickedObject);
                 selectedFood = null;
                 isDragging = false;
-                if (clickedObject.CompareTag("Food")){
-                	Debug.Log("Soltou o alimento em qualquer lugar.");
+                if (clickedObject.CompareTag("Food"))
+                {
+                    Debug.Log("Soltou o alimento em qualquer lugar.");
                 }
-                else {
-                	Debug.Log("Soltou o objeto em qualquer lugar.");
+                else
+                {
+                    Debug.Log("Soltou o objeto em qualquer lugar.");
                 }
             }
             else
@@ -173,6 +192,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     void PlaceFood(GameObject target)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -180,8 +200,18 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            // Coloque o alimento na posição onde o raio atingiu
-            selectedFood.transform.position = hit.point;
+            if (selectedFood.CompareTag("Lid"))
+            {
+                // Se for a tampa, define a posição específica
+                Vector3 tablePosition = new Vector3(8.3f, 0.8f, 3.0f); // Ajuste a altura conforme necessário
+                selectedFood.transform.position = tablePosition;
+                Debug.Log("Tampa colocada na posição específica.");
+            }
+            else
+            {
+                // Coloque o alimento na posição onde o raio atingiu
+                selectedFood.transform.position = hit.point;
+            }
         }
     }
 }
