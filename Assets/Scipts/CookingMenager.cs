@@ -171,7 +171,7 @@ public class CookingManager : MonoBehaviour
             cookingTime = 10f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
-            Debug.Log($"Adicionou {foodItem.name} à panela {pan.name} na posição {foodPosition.position}");
+            Debug.Log($"Adicionou {foodItem.name} à panela {pan.name}");
         }
         else
         {
@@ -227,7 +227,7 @@ public class CookingManager : MonoBehaviour
             cookingTime = 10f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
-            Debug.Log($"Adicionou {foodItem.name} à frigideira {fryingPan.name} na posição {foodPosition.position}");
+            Debug.Log($"Adicionou {foodItem.name} à frigideira {fryingPan.name}");
         }
         else
         {
@@ -261,10 +261,10 @@ public class CookingManager : MonoBehaviour
                 Debug.Log("Não há alimento na panela para remover.");
             }
         }
-        else
-        {
-            Debug.LogError($"O GameObject 'FoodPosition' não encontrado na panela {pan.name}.");
-        }
+        // else
+        // {
+        //     Debug.LogError($"O GameObject 'FoodPosition' não encontrado na panela {pan.name}.");
+        // }
     }
 
     public void RemoveFoodFromFryPan(GameObject fryingPan)

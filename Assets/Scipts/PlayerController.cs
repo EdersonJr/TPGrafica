@@ -209,10 +209,10 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Soltou o objeto em qualquer lugar.");
                 }
             }
-            else
-            {
-                Debug.Log("O objeto clicado não é nem comida nem uma panela.");
-            }
+            // else
+            // {
+            //     Debug.Log("O objeto clicado não é nem comida nem uma panela.");
+            // }
         }
     }
 
