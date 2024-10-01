@@ -15,6 +15,7 @@ TagManager:
   - Stove
   - Lid
   - table
+  - recipe
   layers:
   - Default
   - TransparentFX

@@ -87,6 +87,20 @@ public class PlayerController : MonoBehaviour
             isDragging = true;  // Começa a arrastar a água
             Debug.Log($"Selecionou a água");
         }
+        else if (clickedObject.CompareTag("recipe"))
+        {
+            selectedFood = clickedObject;
+            if(isDragging == true){
+            	selectedFood.transform.localScale = new Vector3(1, 1, 1);
+            	selectedFood.transform.rotation = Quaternion.Euler(-84, -90, 0);
+            } else {
+            	selectedFood.transform.localScale = new Vector3(11, 11, 1);
+            	selectedFood.transform.rotation = Quaternion.Euler(-50, -90, 0);
+            }
+            
+            isDragging = true;  // Começa a arrastar a água
+            Debug.Log($"Selecionou a receita de carne");
+        }
         
         else if (clickedObject.CompareTag("Pan"))
         {
@@ -198,16 +212,23 @@ public class PlayerController : MonoBehaviour
             {
                 // Soltar o alimento em qualquer lugar da cena
                 PlaceFood(clickedObject);
-                selectedFood = null;
+                //selectedFood = null;
                 isDragging = false;
                 if (clickedObject.CompareTag("Food"))
                 {
                     Debug.Log("Soltou o alimento em qualquer lugar.");
                 }
+                //if (clickedObject.CompareTag("recipe"))
+                //{
+                //    selectedFood.transform.localScale = new Vector3(1, 1, 1);
+        	//    selectedFood.transform.rotation = Quaternion.Euler(-84, -90, 0);
+                //    Debug.Log("Soltou o a receita em qualquer lugar.");
+                //}
                 else
                 {
                     Debug.Log("Soltou o objeto em qualquer lugar.");
                 }
+                selectedFood = null;
             }
             // else
             // {
