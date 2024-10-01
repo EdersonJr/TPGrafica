@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "TPGrafica.sln"
+    "dotnet.defaultSolution": "TPGrafica-1.sln"
 }

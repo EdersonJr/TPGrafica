@@ -12,6 +12,8 @@ public class CookingManager : MonoBehaviour
     public GameObject pasta;
     public GameObject water;
     public GameObject oil;
+    public GameObject fire;
+    public GameObject smoke;
 
     [SerializeField] TextMeshProUGUI timerText; //mostra timer
 
@@ -34,40 +36,38 @@ public class CookingManager : MonoBehaviour
 
         timerText.gameObject.SetActive(false);
         foodName.gameObject.SetActive(false);
+        fire.SetActive(false);
+        smoke.SetActive(false);
     }
 
     void Update()
     {
+        PanProperties panProperties = fryingPan.GetComponent<PanProperties>();
         if (isCooking && isStoveOn)
         {
             cookingTime -= Time.deltaTime;
             if (cookingTime <= 0f)
             {
-                isCooking = false;
-                Debug.Log("Food is ready!");
-
+                isCooking=false;
+                Debug.Log($"{foodName.text} esta queimando! Apague o fogo!");
+                panProperties.isBurning = true;
                 timerText.color = Color.red;
-
                 foodName.color = Color.red;
-
                 cookingTime = 0f;
-
-                // Chama a função para substituir o Steak pela Burger
-                ReplaceFoodWithBurger();
             }
-             else if(cookingTime <4){
-
+             else if(cookingTime <7){
                 timerText.color = Color.yellow;
-
                 foodName.color = Color.yellow;
-
+                smoke.SetActive(true);
+                Debug.Log($"Cuidado! {foodName.text} ira queimar, retire da frigideira!");
             }
 
-            else if(cookingTime < 10){
+            else if(cookingTime < 15){
 
                 timerText.color = Color.green;
-
                 foodName.color = Color.green;
+                Debug.Log($"{foodName.text} esta pronto! Retire da frigideira!");
+                //ReplaceFoodWithBurger();
 
             }
 
@@ -92,6 +92,13 @@ public class CookingManager : MonoBehaviour
                 foodStartTime.Remove(entry.Key);
                 break; // Importante sair do loop para evitar erros de modificação do dicionário
             }
+        }
+        if (panProperties.isBurning){
+            fire.SetActive(true);
+            smoke.SetActive(false);
+        }
+        else{
+            fire.SetActive(false);
         }
     }
 
@@ -126,9 +133,13 @@ public class CookingManager : MonoBehaviour
                 Burger.transform.position = burgerPosition;
                 Burger.transform.rotation = steakRotation;
                 Burger.SetActive(true); // Ativa a Burger, se estiver desativada
+                foodName.text = Burger.name;
 
                 // Destrói o Steak
-                Destroy(steak);
+                //Destroy(steak);
+                steak.SetActive(false);
+                GameObject fryingPan = GameObject.Find("fryingPan");
+                AddFoodToFryPan(Burger, fryingPan);
 
                 Debug.Log("Steak foi substituído por Burger!");
             }
@@ -168,7 +179,7 @@ public class CookingManager : MonoBehaviour
             foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna o "FoodPosition" o pai do alimento
-            cookingTime = 10f; // Reinicia o tempo de cozimento
+            cookingTime = 25f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
             Debug.Log($"Adicionou {foodItem.name} à panela {pan.name}");
@@ -199,6 +210,7 @@ public class CookingManager : MonoBehaviour
                 Debug.Log("A tampa foi colocada. Apagando o fogo na frigideira...");
                 // Apaga o fogo
                 panProperties.isBurning = false;
+                fire.SetActive(false);
                 // Ação extra, como som ou animação de apagar o fogo
             }
             else
@@ -224,7 +236,7 @@ public class CookingManager : MonoBehaviour
             foodName.text = foodItem.name;
             foodItem.transform.position = foodPosition.position;
             foodItem.transform.SetParent(foodPosition); // Torna a frigideira o pai do alimento
-            cookingTime = 10f; // Reinicia o tempo de cozimento
+            cookingTime = 25f; // Reinicia o tempo de cozimento
             foodStartTime[foodItem] = Time.time; // Registra o tempo de adição do alimento
 
             Debug.Log($"Adicionou {foodItem.name} à frigideira {fryingPan.name}");

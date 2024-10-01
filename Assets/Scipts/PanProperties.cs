@@ -13,7 +13,7 @@ public class PanProperties : MonoBehaviour
     void Update()
     {
         // Se óleo foi adicionado e ainda não há comida, inicia o temporizador
-        if (hasOil && !hasFood && !isBurning)
+        if (hasOil && !hasFood && !isBurning && !hasLid)
         {
             timeSinceOilAdded += Time.deltaTime;
 
